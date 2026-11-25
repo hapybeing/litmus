@@ -161,3 +161,41 @@ export interface SelfTestReport {
   elapsedMs: number;
   assertions: SelfTestAssertion[];
 }
+
+/** PDF user-space bounding box [x1, y1, x2, y2] (bottom-left origin, in PDF points) */
+export interface PdfBoundingBox {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+export interface PdfFinding extends ParsedStatFinding {
+  page: number;
+  /** One or more per-line PDF user-space rectangles covering the matched statistical clause */
+  rects: PdfBoundingBox[];
+  /** Surrounding sentence context extracted from the manuscript page */
+  contextSnippet: string;
+}
+
+export interface PdfPageSummary {
+  pageNumber: number;
+  widthPt: number;
+  heightPt: number;
+  text: string;
+  findingCount: number;
+}
+
+export interface ManuscriptAuditResult {
+  fileName: string;
+  fileSizeBytes: number;
+  sha256Short: string;
+  pageCount: number;
+  pages: PdfPageSummary[];
+  findings: PdfFinding[];
+  driftReport: SampleSizeDriftReport;
+  extractedTableRows: TableRowInput[];
+  extractedTablePages: number[];
+  extractionMs: number;
+}
+

@@ -56,10 +56,10 @@ export function DropCurtain({ visible }: DropCurtainProps) {
           className="mt-2 micro-label"
           style={{ color: 'var(--ink-cobalt)' }}
         >
-          DROP SPECIMEN · CSV / TSV / PDF · 100% BROWSER-NATIVE
+          DROP SPECIMEN · PDF / CSV / TSV · 100% BROWSER-NATIVE
         </div>
         <p className="mt-2 text-[12.5px]" style={{ color: 'var(--ink-slate)' }}>
-          CSV / TSV tables parse directly into Lab 02 GRIM &amp; GRIMMER verification with zero server upload.
+          PDF manuscripts auto-route to Lab 01 Forensics; CSV / TSV tables parse directly into Lab 02 GRIM &amp; GRIMMER.
         </p>
       </div>
     </div>

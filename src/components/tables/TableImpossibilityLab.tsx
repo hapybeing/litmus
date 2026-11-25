@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ClipboardPaste, Plus, RotateCcw, Trash2, X } from 'lucide-react';
 import type { SdFormulaMode, TableRowAudit, TableRowInput } from '../../types/forensics';
 import { parseBatchTableText } from '../../engine/grim';
@@ -44,6 +44,15 @@ export function TableImpossibilityLab({
   const [selectedId, setSelectedId] = useState<string>(rows[2]?.id ?? rows[0]?.id ?? '');
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
+  const inspectorPaneRef = useRef<HTMLElement>(null);
+
+  // Reset inspector pane scroll to top on mount and whenever selected row changes
+  useEffect(() => {
+    const el = inspectorPaneRef.current;
+    if (el) {
+      el.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [selectedId]);
 
   const counts = useMemo(() => {
     let verified = 0;
@@ -452,7 +461,7 @@ export function TableImpossibilityLab({
           </div>
 
           <div className="flex-1 overflow-auto">
-            <table className="w-full border-collapse text-left">
+            <table className="w-full border-collapse text-left table-fixed min-w-[600px]">
               <thead className="sticky top-0 z-10">
                 <tr
                   style={{
@@ -460,28 +469,28 @@ export function TableImpossibilityLab({
                     borderBottom: '1px solid var(--rule-strong)',
                   }}
                 >
-                  <th className="py-2 pl-4 pr-2 micro-label" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 pl-3.5 pr-2 micro-label w-[34%]" style={{ color: 'var(--ink-slate)' }}>
                     Variable / Condition
                   </th>
-                  <th className="py-2 px-2 micro-label text-right w-[84px]" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 px-1.5 micro-label text-right w-[68px]" style={{ color: 'var(--ink-slate)' }}>
                     Mean
                   </th>
-                  <th className="py-2 px-2 micro-label text-right w-[82px]" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 px-1.5 micro-label text-right w-[66px]" style={{ color: 'var(--ink-slate)' }}>
                     SD
                   </th>
-                  <th className="py-2 px-2 micro-label text-right w-[64px]" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 px-1.5 micro-label text-right w-[46px]" style={{ color: 'var(--ink-slate)' }}>
                     N
                   </th>
-                  <th className="py-2 px-2 micro-label text-right w-[52px]" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 px-1 micro-label text-right w-[34px]" style={{ color: 'var(--ink-slate)' }}>
                     k
                   </th>
-                  <th className="py-2 px-2 micro-label text-right w-[56px]" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 px-1.5 micro-label text-right w-[50px]" style={{ color: 'var(--ink-slate)' }}>
                     Sum S
                   </th>
-                  <th className="py-2 pl-2 pr-3 micro-label text-right w-[156px]" style={{ color: 'var(--ink-slate)' }}>
+                  <th className="py-2 pl-1.5 pr-2 micro-label text-right w-[144px]" style={{ color: 'var(--ink-slate)' }}>
                     Verdict
                   </th>
-                  <th className="py-2 pr-2 w-[28px]" aria-label="Row actions" />
+                  <th className="py-2 pr-1.5 w-[26px]" aria-label="Row actions" />
                 </tr>
               </thead>
               <tbody>
@@ -511,14 +520,15 @@ export function TableImpossibilityLab({
                           boxShadow: isSelected ? 'inset 2.5px 0 0 0 var(--ink-cobalt)' : undefined,
                         }}
                       >
-                        <td className="py-2 pl-4 pr-2">
+                        <td className="py-2 pl-3.5 pr-1.5" title={row.label}>
                           <input
                             type="text"
                             value={row.label}
+                            title={row.label}
                             onFocus={() => setSelectedId(row.id)}
                             onChange={(e) => onUpdateRow(row.id, { label: e.target.value })}
                             aria-label={`Row label for ${row.label}`}
-                            className="w-full bg-transparent text-[12.5px] font-medium px-1 py-0.5 border border-transparent hover:border-[#DCD6CA] focus:border-[#1D4ED8] focus:bg-[#FAF8F4]"
+                            className="w-full bg-transparent text-[12.5px] font-medium px-1 py-0.5 truncate border border-transparent hover:border-[#DCD6CA] focus:border-[#1D4ED8] focus:bg-[#FAF8F4]"
                             style={{ color: 'var(--ink-primary)', borderRadius: '1px' }}
                           />
                         </td>
@@ -645,15 +655,16 @@ export function TableImpossibilityLab({
 
         {/* Right Pane: Precision Vernier Caliper & Proof Folio */}
         <section
+          ref={inspectorPaneRef}
           aria-label="Precision Vernier caliper and mathematical proof"
-          className="lg:w-[46%] flex flex-col min-h-0 overflow-y-auto p-4 lg:p-5"
+          className="lg:w-[46%] flex flex-col min-h-0 overflow-y-auto p-3.5 lg:p-4"
           style={{ backgroundColor: 'var(--bg-ground)' }}
         >
           {selectedAudit ? (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Folio Header */}
               <div
-                className="p-4"
+                className="p-3.5"
                 style={{
                   backgroundColor: 'var(--bg-folio)',
                   border: '1px solid var(--rule-hairline)',

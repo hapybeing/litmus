@@ -10,6 +10,8 @@ interface TopBarProps {
   sha256Short: string;
   tableSpecimens: TableSpecimen[];
   activeSpecimenId: string;
+  isCaseFile01Active: boolean;
+  onSelectCaseFile01: () => void;
   onSelectTableSpecimen: (id: string) => void;
   onUploadFile: (file: File) => void;
   onExportDossier: () => void;
@@ -30,6 +32,8 @@ export function TopBar({
   sha256Short,
   tableSpecimens,
   activeSpecimenId,
+  isCaseFile01Active,
+  onSelectCaseFile01,
   onSelectTableSpecimen,
   onUploadFile,
   onExportDossier,
@@ -59,15 +63,15 @@ export function TopBar({
 
   return (
     <header
-      className="h-[48px] shrink-0 flex items-center justify-between gap-4 px-4 select-none relative z-30"
+      className="h-[48px] shrink-0 flex items-center justify-between gap-2.5 px-3.5 select-none relative z-30"
       style={{
         backgroundColor: 'var(--bg-folio)',
         borderBottom: '1px solid var(--rule-hairline)',
       }}
     >
       {/* Left: Masthead + Mode Switcher */}
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="flex items-baseline gap-2 shrink-0 pr-1">
+      <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-baseline gap-2 shrink-0 pr-0.5">
           <span
             className="font-editorial text-[23px] leading-none tracking-[-0.015em]"
             style={{ color: 'var(--ink-primary)' }}
@@ -75,7 +79,7 @@ export function TopBar({
             LITMUS
           </span>
           <span
-            className="hidden xl:inline text-[9.5px] font-medium uppercase tracking-[0.14em]"
+            className="hidden 2xl:inline text-[9.5px] font-medium uppercase tracking-[0.14em]"
             style={{ color: 'var(--ink-slate)' }}
           >
             FORENSIC BENCH
@@ -91,7 +95,7 @@ export function TopBar({
         <nav
           role="tablist"
           aria-label="Forensic Laboratories"
-          className="flex items-center h-[48px] gap-1"
+          className="flex items-center h-[48px] gap-0.5 shrink-0"
         >
           {MODE_TABS.map((tab) => {
             const isActive = activeMode === tab.id;
@@ -102,7 +106,7 @@ export function TopBar({
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => onModeChange(tab.id)}
-                className="relative h-full px-2.5 flex items-center gap-1.5 text-[11px] font-medium tracking-[0.09em] uppercase whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+                className="relative h-full px-2 flex items-center gap-1.5 text-[11px] font-medium tracking-[0.08em] uppercase whitespace-nowrap shrink-0 transition-colors cursor-pointer"
                 style={{
                   color: isActive ? 'var(--ink-primary)' : 'var(--ink-slate)',
                 }}
@@ -130,25 +134,25 @@ export function TopBar({
 
       {/* Center: Active Specimen Strip (Architectural hairline plate, zero pills) */}
       <div
-        className="hidden lg:flex items-center gap-2.5 px-2.5 h-[30px] max-w-[460px] min-w-0"
+        className="hidden lg:flex items-center gap-2 px-2.5 h-[30px] min-w-0 shrink overflow-hidden"
         style={{
           backgroundColor: 'var(--bg-ground)',
           border: '1px solid var(--rule-hairline)',
           borderRadius: '2px',
         }}
-        title={`${specimenName} · SHA-256 ${sha256Short}`}
+        title={`${specimenName} · ${specimenCountLabel} · SHA-256 ${sha256Short}`}
       >
         <span
-          className="text-[11.5px] font-medium truncate"
+          className="text-[11.5px] font-medium truncate max-w-[125px] xl:max-w-[170px]"
           style={{ color: 'var(--ink-primary)' }}
         >
           {specimenName}
         </span>
-        <span style={{ color: 'var(--rule-strong)' }} aria-hidden="true">
+        <span className="hidden xl:inline" style={{ color: 'var(--rule-strong)' }} aria-hidden="true">
           ·
         </span>
         <span
-          className="mono-num text-[10.5px] whitespace-nowrap shrink-0"
+          className="hidden xl:inline mono-num text-[10.5px] whitespace-nowrap shrink-0"
           style={{ color: 'var(--ink-slate)' }}
         >
           {specimenCountLabel}
@@ -200,7 +204,7 @@ export function TopBar({
             <div
               role="menu"
               aria-label="Forensic Case Files"
-              className="absolute right-0 mt-1.5 w-[340px] z-50"
+              className="absolute right-0 mt-1.5 w-[355px] z-50"
               style={{
                 backgroundColor: 'var(--bg-folio)',
                 border: '1px solid var(--rule-strong)',
@@ -221,7 +225,60 @@ export function TopBar({
               </div>
 
               <div className="py-1">
-                {/* Active Phase 1 Table Specimens */}
+                {/* Active Case File 01: Manuscript Audit PDF */}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    onSelectCaseFile01();
+                    onModeChange('manuscript');
+                    setMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 flex items-start justify-between gap-2 cursor-pointer transition-colors hover:bg-[#F4F1EA]"
+                  style={{
+                    backgroundColor:
+                      activeMode === 'manuscript' && isCaseFile01Active
+                        ? 'var(--tint-cobalt)'
+                        : undefined,
+                  }}
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="mono-num text-[10px] font-medium"
+                        style={{ color: 'var(--ink-cobalt)' }}
+                      >
+                        CASE 01
+                      </span>
+                      <span
+                        className="text-[12px] font-medium truncate"
+                        style={{ color: 'var(--ink-primary)' }}
+                      >
+                        Attention Restoration Pre-Print (PDF)
+                      </span>
+                    </div>
+                    <p
+                      className="text-[11px] mt-0.5 leading-snug"
+                      style={{ color: 'var(--ink-slate)' }}
+                    >
+                      3-page PDF · 8 inline tests (2 decision flips, 1 drift, N-drop) + Table 1
+                    </p>
+                  </div>
+                  {activeMode === 'manuscript' && isCaseFile01Active && (
+                    <Check
+                      className="w-3.5 h-3.5 shrink-0 mt-0.5"
+                      style={{ color: 'var(--ink-cobalt)' }}
+                      aria-hidden="true"
+                    />
+                  )}
+                </button>
+
+                <div
+                  className="my-1 mx-3 h-px"
+                  style={{ backgroundColor: 'var(--rule-hairline)' }}
+                />
+
+                {/* Active Table Specimens */}
                 {tableSpecimens.map((spec) => {
                   const selected = activeMode === 'table' && activeSpecimenId === spec.id;
                   return (
@@ -277,37 +334,7 @@ export function TopBar({
                   style={{ backgroundColor: 'var(--rule-hairline)' }}
                 />
 
-                {/* Phase 2 & 3 Specimens (Inspectable staging plates) */}
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    onModeChange('manuscript');
-                    setMenuOpen(false);
-                  }}
-                  className="w-full text-left px-3 py-2 flex items-start justify-between gap-2 cursor-pointer hover:bg-[#F4F1EA]"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="mono-num text-[10px]"
-                        style={{ color: 'var(--ink-muted)' }}
-                      >
-                        CASE 01
-                      </span>
-                      <span
-                        className="text-[12px] font-medium"
-                        style={{ color: 'var(--ink-slate)' }}
-                      >
-                        Empirical Manuscript PDF Audit
-                      </span>
-                    </div>
-                    <p className="text-[10.5px] mt-0.5" style={{ color: 'var(--ink-muted)' }}>
-                      Phase 2 · In-memory PDF 1.4 + statParser kernel active
-                    </p>
-                  </div>
-                </button>
-
+                {/* Phase 3 Specimen Staging */}
                 <button
                   type="button"
                   role="menuitem"
@@ -349,7 +376,7 @@ export function TopBar({
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".csv,.tsv,.txt"
+                  accept=".pdf,.csv,.tsv,.txt,application/pdf"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
@@ -371,7 +398,7 @@ export function TopBar({
                   }}
                 >
                   <Upload className="w-3.5 h-3.5" strokeWidth={1.75} aria-hidden="true" />
-                  <span>Load Local CSV / TSV Table</span>
+                  <span>Upload Local PDF / CSV / TSV</span>
                 </button>
               </div>
             </div>
