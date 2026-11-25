@@ -1,0 +1,170 @@
+:root {
+  /* Archival Rag & Ink Material Palette */
+  --bg-ground: #F4F1EA;
+  --bg-folio: #FAF8F4;
+  --bg-inset: #ECE8DE;
+  --rule-hairline: #DCD6CA;
+  --rule-strong: #C5BEB0;
+
+  /* Ink Hierarchy */
+  --ink-primary: #141412;
+  --ink-slate: #5C5850;
+  --ink-muted: #7C766B;
+
+  /* Strict Semantic Ink Accents (NEVER decorative) */
+  --ink-vermilion: #C62828;
+  --tint-vermilion: #FDF0EF;
+  --rule-vermilion: #EBC3C0;
+
+  --ink-amber: #B36B00;
+  --tint-amber: #FEF7E8;
+  --rule-amber: #E8D2A6;
+
+  --ink-forest: #166534;
+  --tint-forest: #EDF7F0;
+  --rule-forest: #BBDCC5;
+
+  --ink-cobalt: #1D4ED8;
+  --tint-cobalt: #EFF4FF;
+  --rule-cobalt: #C2D4FA;
+
+  /* Typography */
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Mechanical Motion */
+  --ease-mechanical: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 155ms;
+  --dur-base: 210ms;
+
+  /* Structural Radii (Strict 0-2px architectural discipline) */
+  --radius-none: 0px;
+  --radius-crisp: 2px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-ground);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle non-interactive 1.6% opacity archival rag paper-grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.016;
+  background-repeat: repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='rag'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23rag)'/%3E%3C/svg%3E");
+}
+
+/* Typography Utilities */
+.font-editorial {
+  font-family: var(--font-serif);
+}
+
+.font-ui {
+  font-family: var(--font-sans);
+}
+
+.mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+.micro-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Mechanical Ink-Impression Verdict Stamp Animation */
+@keyframes inkStamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-ink-stamp {
+  animation: inkStamp 155ms var(--ease-mechanical) both;
+}
+
+/* Crisp Focus Ring (Blueprint Cobalt) */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 1.5px solid var(--ink-cobalt);
+  outline-offset: 1px;
+}
+
+/* Reduced Motion Compliance */
+@media (prefers-reduced-motion: reduce) {
+  .animate-ink-stamp {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Custom Slim Archival Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-ground);
+  border-left: 1px solid var(--rule-hairline);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-slate);
+}
+
+/* Remove native number input spinners for razor-sharp tabular column alignment */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+

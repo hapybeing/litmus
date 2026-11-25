@@ -1,0 +1,8 @@
+{
+  "name": "LITMUS — Statistical Forensics & Pre-Flight Audit Workbench",
+  "description": "Zero-upload, browser-native statistical forensics workbench for auditing scientific manuscripts, GRIM/GRIMMER table impossibility, multiverse specification curves, and raw dataset integrity.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
